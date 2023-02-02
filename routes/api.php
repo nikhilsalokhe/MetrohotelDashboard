@@ -17,8 +17,5 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
-<<<<<<< HEAD
 //my change
-=======
 //change
->>>>>>> 723882928fb836d6ba69adffabb24a29a626fb9b
