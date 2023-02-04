@@ -20,4 +20,5 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/Total_customer', 'Customer_info@Total_customer')->name('Total_customer');
 // change  

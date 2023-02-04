@@ -124,17 +124,6 @@
             </a>
           </li>
 
-          <li class="nav-item menu-open">
-            <a href="#" class="nav-link ">
-              <i class="nav-icon fas fa-tachometer-alt"></i>
-              <p>
-                MOST VISITED CUSTOMERS
-                <i class="right fas fa-angle-left"></i>
-              </p>
-            </a>
-          </li>
-          
-
         </ul>
       </nav>
       <!-- /.sidebar-menu -->
