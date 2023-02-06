@@ -7,14 +7,12 @@
       <!-- small box -->
       <div class="small-box bg-info">
         <div class="inner">
-          <h3>150</h3>
+          <h3>{{ $data }}</h3>
 
-          <p>New Orders</p>
+          <p>Total Hotels customers</p>
         </div>
-        <div class="icon">
-          <i class="ion ion-bag"></i>
-        </div>
-        <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+
+        <a href="Total_customer" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
       </div>
     </div>
     <!-- ./col -->
@@ -22,14 +20,12 @@
       <!-- small box -->
       <div class="small-box bg-success">
         <div class="inner">
-          <h3>53<sup style="font-size: 20px">%</sup></h3>
+          <h3>{{ $todays }}</h3>
 
-          <p>Bounce Rate</p>
+          <p>Today's Visited Customers</p>
         </div>
-        <div class="icon">
-          <i class="ion ion-stats-bars"></i>
-        </div>
-        <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+
+        <a href="Todays_customer" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
       </div>
     </div>
     <!-- ./col -->
@@ -37,14 +33,12 @@
       <!-- small box -->
       <div class="small-box bg-warning">
         <div class="inner">
-          <h3>44</h3>
+          <h3>{{$Weeks}}</h3>
 
-          <p>User Registrations</p>
+          <p>This Week's Customers</p>
         </div>
-        <div class="icon">
-          <i class="ion ion-person-add"></i>
-        </div>
-        <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+
+        <a href="Weeks_customer" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
       </div>
     </div>
     <!-- ./col -->
@@ -52,17 +46,53 @@
       <!-- small box -->
       <div class="small-box bg-danger">
         <div class="inner">
-          <h3>65</h3>
+          <h3>{{$Months}}</h3>
 
-          <p>Unique Visitors</p>
+          <p>This month's Customers</p>
         </div>
-        <div class="icon">
-          <i class="ion ion-pie-graph"></i>
-        </div>
-        <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+
+        <a href="Months_customer" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
       </div>
     </div>
     <!-- ./col -->
+    <div class="col-lg-3 col-6">
+      <!-- small box -->
+      <div class="small-box bg-primary text-white">
+        <div class="inner">
+          <h3>{{$avgbooking}}</h3>
+
+          <p>Monthly Avrage Bookings </p>
+        </div>
+
+        <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+      </div>
+    </div>
+    <div class="col-lg-3 col-6">
+      <!-- small box -->
+      <div class="small-box bg-secondary text-white">
+        <div class="inner">
+          <h3>{{$rate}}</h3>
+
+          <p>Monthly Avrage RoomRent</p>
+        </div>
+
+        <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+      </div>
+    </div>
+
+    <div class="col-lg-3 col-6">
+      <!-- small box -->
+      <div class="small-box bg-danger">
+        <div class="inner">
+          <h3>{{$mostVistited[0]->count}}</h3>
+
+          <p>Most Visited Customers</p>
+        </div>
+
+        <a href="MostVistited" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+      </div>
+    </div>
   </div>
 </div>
+
 @endsection

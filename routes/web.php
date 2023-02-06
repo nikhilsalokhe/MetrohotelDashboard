@@ -19,5 +19,10 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
-// change  
+Route::get('/home', 'HomeController@index');
+Route::get('/Total_customer', 'Customer_info@Total_customer');
+Route::get('/Todays_customer', 'Customer_info@Todays_customer');
+Route::get('/Weeks_customer', 'Customer_info@Weeks_customer');
+Route::get('/Months_customer', 'Customer_info@Months_customer');
+Route::get('/MostVistited', 'Customer_info@MostVistited');
+// change

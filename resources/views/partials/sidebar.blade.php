@@ -3,7 +3,7 @@
     <!-- Brand Logo -->
     <a href="index3.html" class="brand-link">
       <img src="dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
-      <span class="brand-text font-weight-light">AdminLTE 3</span>
+      <span class="brand-text font-weight-light"> HOTEL METRO</span>
     </a>
 
     <!-- Sidebar -->
@@ -36,33 +36,92 @@
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
           <li class="nav-item menu-open">
-            <a href="#" class="nav-link active">
+            <a href="#" class="nav-link">
               <i class="nav-icon fas fa-tachometer-alt"></i>
               <p>
-                Dashboard
+                TYPES OF BOOKING
                 <i class="right fas fa-angle-left"></i>
               </p>
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="./index.html" class="nav-link active">
+                <a href="./index.html" class="nav-link ">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Dashboard v1</p>
+                  <p>Family Booking</p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="./index2.html" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Dashboard v2</p>
+                  <p>Couple Booking</p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="./index3.html" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Dashboard v3</p>
+                  <p>Corporate Booking</p>
                 </a>
               </li>
             </ul>
+          </li>
+          <li class="nav-item menu-open">
+            <a href="#" class="nav-link ">
+              <i class="nav-icon fas fa-tachometer-alt"></i>
+              <p>
+                  SOURCE OF BOOKING
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="./index.html" class="nav-link ">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>On Arrival Booking</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="./index2.html" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Referance Booking</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="./index3.html" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Online Booking</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+
+          <li class="nav-item menu-open">
+            <a href="#" class="nav-link ">
+              <i class="nav-icon fas fa-tachometer-alt"></i>
+              <p>
+                  CHECKIN IN 3 HOURS
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+          </li>
+
+          <li class="nav-item menu-open">
+            <a href="#" class="nav-link ">
+              <i class="nav-icon fas fa-tachometer-alt"></i>
+              <p>
+                GROUP BOOKINGS
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+          </li>
+
+          <li class="nav-item menu-open">
+            <a href="#" class="nav-link ">
+              <i class="nav-icon fas fa-tachometer-alt"></i>
+              <p>
+                  CUSTOMER HISTORY
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
           </li>
 
         </ul>
