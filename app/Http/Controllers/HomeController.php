@@ -24,11 +24,11 @@ class HomeController extends Controller
      */
     public function index()
     {
-        //
+        //Total Customer count
         $data = DB::table('customer_info')->select('*')->count();
 
 
-        //
+        //Todays customer
         $today=carbon::today();
         $tomorrow = Carbon::tomorrow();
         $todays= DB::table('customer_info')
@@ -36,47 +36,46 @@ class HomeController extends Controller
         ->select('customer_info.*')
         ->wherebetween('Sheet1.Arrival_DT',[$today,$tomorrow])->count();
 
-        //
+        //This Week customer
         $today=carbon::today();
-        //$tomorrow = Carbon::tomorrow();
         $startWeek = Carbon::now()->subWeek()->startOfWeek();
-        //dd($startWeek);
         $Weeks = DB::table('customer_info')
         ->join('Sheet1','customer_info.Customer_Id','=','Sheet1.Customer_Id')
         ->select('customer_info.*')
         ->wherebetween('Sheet1.Arrival_DT',[$startWeek,$today])->count();
 
-       // $today=carbon::today();
-        $lastMonth =Carbon::now()->subMonth()->format('Y-m-d'); // 11
-
-        //dd($lastMonth);
-
+       // This months customer
+        $lastMonth =Carbon::now()->subMonth()->format('Y-m-d');  //dd($lastMonth);
             $Months= DB::table('customer_info')
             ->join('Sheet1','customer_info.Customer_Id','=','Sheet1.Customer_Id')
             ->select('customer_info.*')
             ->wherebetween('Sheet1.Arrival_DT',[$lastMonth,$today])->count();
 
-            $rate= DB::table('customer_info')
-            ->join('Sheet1','customer_info.Customer_Id','=','Sheet1.Customer_Id')
-            ->select('customer_info.*')
-            ->wherebetween('Sheet1.Arrival_DT',[$lastMonth,$today])->avg('Bill_amount');
+            //Avrage of room rate
+            $rate= DB::table('Sheet1')->AVG('Bill_amount');
 
-            $booking= DB::table('customer_info')
-            ->join('Sheet1','customer_info.Customer_Id','=','Sheet1.Customer_Id')
-            ->select('customer_info.*')
-            ->wherebetween('Sheet1.Arrival_DT',[$lastMonth,$today])->count();
-            $avgbooking = $booking/780;
+            //Avrage of Bookings
+            $oldest = DB::table('Sheet1' )->orderBy('Arrival_DT','asc')->get();
+            $first = $oldest->first()->Arrival_DT;
+            $diff=$today->diffInDays($first);
+            $totaloccupancy= $diff*26;// dd($totalDays);
+            $booking= DB::table('Sheet1')
+            ->wherebetween('Sheet1.Arrival_DT',[$first,$today])->count();
+        //    $avgbooking = $booking/26;
+// dd($booking);
 
 
+
+            //Most visited customers
             $mostVistited= DB::table('Sheet1')
             ->select('Customer_Id','Guest_name',DB::raw('COUNT(*)as `count`'))
             ->groupBy('Customer_Id','Guest_name')->having('count','>',1)->orderBy('count','desc')->get();
 
 
 
-        return view('home',compact('todays','data','Weeks','Months','rate','avgbooking','mostVistited'));
+        return view('home',compact('todays','data','Weeks','Months','rate','booking','mostVistited','totaloccupancy'));
 
     }
-    
+
 
 }

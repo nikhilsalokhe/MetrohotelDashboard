@@ -59,9 +59,9 @@
       <!-- small box -->
       <div class="small-box bg-primary text-white">
         <div class="inner">
-          <h3>{{$avgbooking}}</h3>
+          <h3>{{$booking}}/{{$totaloccupancy}}</h3>
 
-          <p>Monthly Avrage Bookings </p>
+          <p> Avrage Bookings </p>
         </div>
 
         <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
@@ -76,7 +76,7 @@
           <p>Monthly Avrage RoomRent</p>
         </div>
 
-        <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+        <a href="Monthly_Bill" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
       </div>
     </div>
 

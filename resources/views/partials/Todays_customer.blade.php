@@ -1,7 +1,7 @@
 @extends('layouts.internal')
 
 @section('content')
-<h1> Total Customers</h1>
+<h1> Today's Customers</h1>
 {{-- {{$data}} --}}
 <div class="card-body">
     <table id="example2" class="table table-bordered table-hover">
