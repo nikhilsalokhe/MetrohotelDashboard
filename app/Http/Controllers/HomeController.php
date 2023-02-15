@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use DB;
+//use DB;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
+
 class HomeController extends Controller
 {
     /**
@@ -61,8 +63,9 @@ class HomeController extends Controller
             $totaloccupancy= $diff*26;// dd($totalDays);
             $booking= DB::table('Sheet1')
             ->wherebetween('Sheet1.Arrival_DT',[$first,$today])->count();
-        //    $avgbooking = $booking/26;
-// dd($booking);
+            $percent=($booking/$totaloccupancy)*100;
+           //dd($percent);
+        //    $avgbooking = $booking/26;// dd($booking);
 
 
 
@@ -72,8 +75,22 @@ class HomeController extends Controller
             ->groupBy('Customer_Id','Guest_name')->having('count','>',1)->orderBy('count','desc')->get();
 
 
+            // pie chart
+            $city=DB::select(DB::raw("select count(*) as total_city ,CITY from customer_info group by CITY"));
+//dd($city);
+            $chartdata="";
 
-        return view('home',compact('todays','data','Weeks','Months','rate','booking','mostVistited','totaloccupancy'));
+            foreach($city as $list)
+            {
+                // $chartdata= $list->CITY ;
+                $chartdata.="['".$list->CITY."',   ".$list->total_city."],";
+            }
+            //dd($chartdata);
+            $arr['chartdata']=rtrim($chartdata,",");
+
+
+
+        return view('home',compact('todays','data','Weeks','Months','rate','booking','mostVistited','totaloccupancy','percent','chartdata'));
 
     }
 

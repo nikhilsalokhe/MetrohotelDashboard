@@ -3,14 +3,24 @@
 namespace App\Http\Controllers;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use App\Sheet1;
 use DB;
 
 class Customer_info extends Controller
 {
-    public function Total_customer()
+    public function Total_customer(Request $request)
     {
-        $data = DB::table('customer_info')->select('*')->get();
+        $search=$request['search']?? "";
+        if($search != ""){
+            $data= DB::table('customer_info')
+    ->where('Guest_name','like','%'.$search.'%')->orWhere('phone_no','like','','%'.$search.'%')
+    ->orWhere('Address','like','%'.$search.'%')->orWhere('Customer_id','like','%'.$search.'%')
+    ->get();
 
+        }
+        else{
+        $data = DB::table('customer_info')->select('*')->get();
+    }
         return view('partials.Total_customer',compact('data'));
     }
 
@@ -22,7 +32,7 @@ class Customer_info extends Controller
         //dd($today);
         $data = DB::table('customer_info')
         ->join('Sheet1','customer_info.Customer_Id','=','Sheet1.Customer_Id')
-        ->select('customer_info.*')
+        ->select('*')
         ->wherebetween('Sheet1.Arrival_DT',[$today,$tomorrow])->get();
 
        return view('partials.Todays_customer',compact('data'));
@@ -57,9 +67,16 @@ class Customer_info extends Controller
        return view('partials.Months_customer',compact('data'));
     }
     public function MostVistited(){
-        $mostVistited= DB::table('Sheet1')
-        ->select('Customer_Id','Guest_name',DB::raw('COUNT(*)as `count`'))
-        ->groupBy('Customer_Id','Guest_name')->having('count','>',1)->orderBy('count','desc')->get();
+        // $mostVistited= DB::table('Sheet1')->select(DB::raw('select Customer_Id,Guest_name from Sheet1 Group By Customer_Id,Guest_name ',DB::raw('COUNT(Customer_Id)as `count`')));
+
+
+$mostVistited= DB::table('Sheet1')
+        ->select('Customer_Id','Guest_name',DB::raw('COUNT(Customer_Id)as `count`'))
+        ->groupBy('Customer_Id','Guest_name')
+        ->orderBy('count','desc')->get();
+
+        // dd($mostVistited);
+
 
         return view('partials.mostvisited',compact('mostVistited'));
     }
@@ -91,8 +108,10 @@ class Customer_info extends Controller
         $time6 = DB::table('Sheet1')->select('*')->wherebetween(DB::raw('TIME(Arrival_DT)'),[$f,$f1])->count();
         $time7 = DB::table('Sheet1')->select('*')->wherebetween(DB::raw('TIME(Arrival_DT)'),[$g,$g1])->count();
         $time8 = DB::table('Sheet1')->select('*')->wherebetween(DB::raw('TIME(Arrival_DT)'),[$h,$i])->count();
+        $time9 = DB::table('Sheet1')->select('*')->wherebetween(DB::raw('TIME(Arrival_DT)'),[$a,$i])->count();
+      //  dd($time9);
 
-        return view('sidebar_elements.Checkin_3_hr',compact('time1','time2','time3','time4','time5','time6','time7','time8'));
+        return view('sidebar_elements.Checkin_3_hr',compact('time1','time2','time3','time4','time5','time6','time7','time8','time9'));
     }
 
 public function Monthly_Bill(){
@@ -102,17 +121,19 @@ public function Monthly_Bill(){
     $mar22='2022-03-01 00:00:00';$endmar22='2022-03-31 00:00:00';
     $apr22='2022-04-01 00:00:00';$endapr22='2022-04-30 00:00:00';
     $may22='2022-05-01 00:00:00';$endmay22='2022-05-31 00:00:00';
-    $jun22='2022-06-01 00:00:00';$endjun22='2022-06-31 00:00:00';
+    $jun22='2022-06-01 00:00:00';$endjun22='2022-06-30 00:00:00';
     $july22='2022-07-01 00:00:00';$endjuly22='2022-07-31 00:00:00';
     $Aug22='2022-08-01 00:00:00';$endAug22='2022-08-31 00:00:00';
-    $Sept22='2022-09-01 00:00:00';$endSep22='2022-09-31 00:00:00';
+    $Sept22='2022-09-01 00:00:00';$endSep22='2022-09-30 00:00:00';
     $Oct22='2022-10-01 00:00:00';$endOct22='2022-10-31 00:00:00';
-    $Nov22='2022-11-01 00:00:00';$endNov22='2022-11-31 00:00:00';
+    $Nov22='2022-11-01 00:00:00';$endNov22='2022-11-30 00:00:00';
     $des22='2022-12-01 00:00:00';$enddes22='2022-12-31 00:00:00';
-    $jan23='2023-01-01 00:00:00';$endjan23='2023-01-31 00:00:00';
+    $jan23='2023-01-01 00:00:00';$endjan23='2023-01-30 00:00:00';
+   // $feb23='2023-01-01 00:00:00';$endfeb23='2023-01-28 00:00:00';
 
 
 
+    $December21r= DB::table('Sheet1')->wherebetween('Sheet1.Arrival_DT',[$des21,$enddes21])->count();
     $December21= DB::table('Sheet1')->wherebetween('Sheet1.Arrival_DT',[$des21,$enddes21])->AVG('Bill_amount');
     $January22= DB::table('Sheet1')->wherebetween('Sheet1.Arrival_DT',[$jan22,$endjan22])->AVG('Bill_amount');
     $February22= DB::table('Sheet1')->wherebetween('Sheet1.Arrival_DT',[$feb22,$endfeb22])->AVG('Bill_amount');
@@ -121,11 +142,8 @@ public function Monthly_Bill(){
     $May22= DB::table('Sheet1')->wherebetween('Sheet1.Arrival_DT',[$may22,$endmay22])->AVG('Bill_amount');
     $June22= DB::table('Sheet1')->wherebetween('Sheet1.Arrival_DT',[$jun22,$endjun22])->AVG('Bill_amount');
     $July22= DB::table('Sheet1')->wherebetween('Sheet1.Arrival_DT',[$july22,$endjuly22])->AVG('Bill_amount');
-
     $August22= DB::table('Sheet1')->wherebetween('Sheet1.Arrival_DT',[$Aug22,$endAug22])->AVG('Bill_amount');
-
     $September22= DB::table('Sheet1')->wherebetween('Sheet1.Arrival_DT',[$Sept22,$endSep22])->AVG('Bill_amount');
-
     $October22= DB::table('Sheet1')->wherebetween('Sheet1.Arrival_DT',[$Oct22,$endOct22])->AVG('Bill_amount');
 
     $November22= DB::table('Sheet1')->wherebetween('Sheet1.Arrival_DT',[$Nov22,$endNov22])->AVG('Bill_amount');
@@ -133,7 +151,38 @@ public function Monthly_Bill(){
     $December22= DB::table('Sheet1')->wherebetween('Sheet1.Arrival_DT',[$des22,$enddes22])->AVG('Bill_amount');
 
     $January23= DB::table('Sheet1')->wherebetween('Sheet1.Arrival_DT',[$jan23,$endjan23])->AVG('Bill_amount');
-return view('partials.Monthly_Bill',compact('December21','January22','February22','March22','April22','May22','June22','July22','August22','September22','October22','November22','December22','January23' ));
+
+    $January22r= DB::table('Sheet1')->wherebetween('Sheet1.Arrival_DT',[$jan22,$endjan22])->count();
+    $February22r= DB::table('Sheet1')->wherebetween('Sheet1.Arrival_DT',[$feb22,$endfeb22])->count();
+    $March22r= DB::table('Sheet1')->wherebetween('Sheet1.Arrival_DT',[$mar22,$endmar22])->count();
+    $April22r= DB::table('Sheet1')->wherebetween('Sheet1.Arrival_DT',[$apr22,$endapr22])->count();
+    $May22r= DB::table('Sheet1')->wherebetween('Sheet1.Arrival_DT',[$may22,$endmay22])->count();
+    $June22r= DB::table('Sheet1')->wherebetween('Sheet1.Arrival_DT',[$jun22,$endjun22])->count();
+    $July22r= DB::table('Sheet1')->wherebetween('Sheet1.Arrival_DT',[$july22,$endjuly22])->count();
+    $August22r= DB::table('Sheet1')->wherebetween('Sheet1.Arrival_DT',[$Aug22,$endAug22])->count();
+    $September22r= DB::table('Sheet1')->wherebetween('Sheet1.Arrival_DT',[$Sept22,$endSep22])->count();
+    $October22r= DB::table('Sheet1')->wherebetween('Sheet1.Arrival_DT',[$Oct22,$endOct22])->count();
+
+    $November22r= DB::table('Sheet1')->wherebetween('Sheet1.Arrival_DT',[$Nov22,$endNov22])->count();
+
+    $December22r= DB::table('Sheet1')->wherebetween('Sheet1.Arrival_DT',[$des22,$enddes22])->count();
+
+    $January23r= DB::table('Sheet1')->wherebetween('Sheet1.Arrival_DT',[$jan23,$endjan23])->count();
+
+
+
+
+    return view('partials.Monthly_Bill',compact('December21','January22','February22','March22','April22','May22','June22','July22','August22','September22','October22','November22','December22','January23','December21r'
+    ,'January22r','February22r','March22r','April22r','May22r','June22r','July22r','August22r','September22r','October22r','November22r','December22r','January23r' ));
+
+}
+public function Details($Customer_Id){
+      $details1=  DB::table('customer_info')->where('customer_info.Customer_Id',$Customer_Id)->first();
+      $details= DB::table('Sheet1')->where('Customer_Id',$Customer_Id)->get();
+
+      return view('partials.Detailsinfo',compact('details','details1'));
+
+    // return view('partials.Detailsinfo')->with('arr',Sheet1::find($Customer_Id));
 
 }
 
