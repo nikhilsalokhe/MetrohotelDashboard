@@ -8,7 +8,7 @@
       <tr>
         <th>Checkin Slots</th>
         <th>No.of Checkins</th>
-        <th>%</th>
+        <th>percentage</th>
     </thead>
     <tbody>
       <tr>

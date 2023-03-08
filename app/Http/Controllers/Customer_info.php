@@ -10,6 +10,8 @@ class Customer_info extends Controller
 {
     public function Total_customer(Request $request)
     {
+
+        // dd($start);
         $search=$request['search']?? "";
         if($search != ""){
             $data= DB::table('customer_info')
@@ -38,34 +40,89 @@ class Customer_info extends Controller
        return view('partials.Todays_customer',compact('data'));
     }
 
-    public function Weeks_customer()
+    public function Weeks_customer(Request $request)
     {
+        // dd($request['start_date']);
+        if($request['start_date']!=null){
+        $start=date('Y-m-d ', strtotime($request['start_date']));
+
+        }
+        else{
+            $start='';
+        }
+        // $start=date('Y-m-d ', strtotime($request['start_date']));
+// dd($start);
+        // $start1=date('Y-m-d', strtotime($request['start_date']))->addDays($days);
+      //  $start=$s->format('d-m-Y');
+
+    //    dd($start);
+        if($request['start_date'] == '')
+        {
         $today=carbon::today();
         //$tomorrow = Carbon::tomorrow();
-        $startWeek = Carbon::now()->subWeek()->startOfWeek();
+        $startWeek =today()->subDays(7);
         //dd($startWeek);
         $data = DB::table('customer_info')
         ->join('Sheet1','customer_info.Customer_Id','=','Sheet1.Customer_Id')
-        ->select('customer_info.*')
-        ->wherebetween('Sheet1.Arrival_DT',[$startWeek,$today])->get();
+        ->select('*')
+        ->wherebetween('Sheet1.Arrival_DT',[$startWeek,$today])->orderBy('Arrival_DT','desc')->get();
+        }
+else{
+    $data = DB::table('customer_info')
+    ->select('*')
+    ->join('Sheet1','customer_info.Customer_Id','=','Sheet1.Customer_Id')
+    ->where('Sheet1.Arrival_DT','like','%'.$start.'%')->get();
+}
+// dd($start);
 
-       return view('partials.Weeks_customer',compact('data'));
+       return view('partials.Weeks_customer',compact('data','start'));
     }
 
-    public function Months_customer()
+    public function Months_customer(Request $request)
     {
+
+
+        // $start=$request['start_date'];
+        // $start=date('Y-m-d', strtotime($request['start_date']));
+        // $end=date('Y-m-d', strtotime($request['end_date']));
+        // dd( $start);
+
+        if(($request['start_date']!=null)&&($request['end_date']!=null)){
+
+            $start=date('Y-m-d ', strtotime($request['start_date']));
+            $end=date('Y-m-d', strtotime($request['end_date']));
+            }
+            else{
+                $start='';
+                $end='';
+            }
         $today=carbon::today();
-        $lastMonth =Carbon::now()->subMonth()->format('Y-m-d'); // 11
+        $lastMonth=Carbon::now()->startOfMonth();
+      //  $lastMonth =Carbon::now()->subMonth()->format('Y-m-d');
 
-    //dd($lastMonth);
-
+        $lastMonth1=Carbon::now()->subMonth()->format('F-Y');
+  //dd($lastMonth1);
+    if($request['start_date'] == '' &&  $request['end_date' ] == '' ){
+    $today1=carbon::today()->format('F-Y');
         $data = DB::table('customer_info')
         ->join('Sheet1','customer_info.Customer_Id','=','Sheet1.Customer_Id')
-        ->select('customer_info.*')
-        ->wherebetween('Sheet1.Arrival_DT',[$lastMonth,$today])->get();
+        ->select('*')
+        ->wherebetween('Sheet1.Arrival_DT',[$lastMonth,$today])->orderBy('Arrival_DT','desc')->get();
 
-       return view('partials.Months_customer',compact('data'));
     }
+        else
+        {
+            $today1=null;
+            $data = DB::table('customer_info')
+            ->join('Sheet1','customer_info.Customer_Id','=','Sheet1.Customer_Id')
+            ->select('*')
+            ->wherebetween('Sheet1.Arrival_DT',[$start,$end])->get();}
+
+
+
+       return view('partials.Months_customer',compact('data','today1','lastMonth1','start','end'));
+    }
+
     public function MostVistited(){
         // $mostVistited= DB::table('Sheet1')->select(DB::raw('select Customer_Id,Guest_name from Sheet1 Group By Customer_Id,Guest_name ',DB::raw('COUNT(Customer_Id)as `count`')));
 
@@ -129,11 +186,11 @@ public function Monthly_Bill(){
     $Nov22='2022-11-01 00:00:00';$endNov22='2022-11-30 00:00:00';
     $des22='2022-12-01 00:00:00';$enddes22='2022-12-31 00:00:00';
     $jan23='2023-01-01 00:00:00';$endjan23='2023-01-30 00:00:00';
-   // $feb23='2023-01-01 00:00:00';$endfeb23='2023-01-28 00:00:00';
+    $feb23='2023-01-01 00:00:00';$endfeb23='2023-01-28 00:00:00';
 
 
 
-    $December21r= DB::table('Sheet1')->wherebetween('Sheet1.Arrival_DT',[$des21,$enddes21])->count();
+    $December21r= DB::table('Sheet1')->wherebetween('Sheet1.Arrival_DT',[$des21,$enddes21])->sum('DAYS');//dd($December21r);
     $December21= DB::table('Sheet1')->wherebetween('Sheet1.Arrival_DT',[$des21,$enddes21])->AVG('Bill_amount');
     $January22= DB::table('Sheet1')->wherebetween('Sheet1.Arrival_DT',[$jan22,$endjan22])->AVG('Bill_amount');
     $February22= DB::table('Sheet1')->wherebetween('Sheet1.Arrival_DT',[$feb22,$endfeb22])->AVG('Bill_amount');
@@ -145,35 +202,31 @@ public function Monthly_Bill(){
     $August22= DB::table('Sheet1')->wherebetween('Sheet1.Arrival_DT',[$Aug22,$endAug22])->AVG('Bill_amount');
     $September22= DB::table('Sheet1')->wherebetween('Sheet1.Arrival_DT',[$Sept22,$endSep22])->AVG('Bill_amount');
     $October22= DB::table('Sheet1')->wherebetween('Sheet1.Arrival_DT',[$Oct22,$endOct22])->AVG('Bill_amount');
-
     $November22= DB::table('Sheet1')->wherebetween('Sheet1.Arrival_DT',[$Nov22,$endNov22])->AVG('Bill_amount');
-
     $December22= DB::table('Sheet1')->wherebetween('Sheet1.Arrival_DT',[$des22,$enddes22])->AVG('Bill_amount');
-
     $January23= DB::table('Sheet1')->wherebetween('Sheet1.Arrival_DT',[$jan23,$endjan23])->AVG('Bill_amount');
+    $February23= DB::table('Sheet1')->wherebetween('Sheet1.Arrival_DT',[$feb23,$endfeb23])->AVG('Bill_amount');
 
-    $January22r= DB::table('Sheet1')->wherebetween('Sheet1.Arrival_DT',[$jan22,$endjan22])->count();
-    $February22r= DB::table('Sheet1')->wherebetween('Sheet1.Arrival_DT',[$feb22,$endfeb22])->count();
-    $March22r= DB::table('Sheet1')->wherebetween('Sheet1.Arrival_DT',[$mar22,$endmar22])->count();
-    $April22r= DB::table('Sheet1')->wherebetween('Sheet1.Arrival_DT',[$apr22,$endapr22])->count();
-    $May22r= DB::table('Sheet1')->wherebetween('Sheet1.Arrival_DT',[$may22,$endmay22])->count();
-    $June22r= DB::table('Sheet1')->wherebetween('Sheet1.Arrival_DT',[$jun22,$endjun22])->count();
-    $July22r= DB::table('Sheet1')->wherebetween('Sheet1.Arrival_DT',[$july22,$endjuly22])->count();
-    $August22r= DB::table('Sheet1')->wherebetween('Sheet1.Arrival_DT',[$Aug22,$endAug22])->count();
-    $September22r= DB::table('Sheet1')->wherebetween('Sheet1.Arrival_DT',[$Sept22,$endSep22])->count();
-    $October22r= DB::table('Sheet1')->wherebetween('Sheet1.Arrival_DT',[$Oct22,$endOct22])->count();
 
-    $November22r= DB::table('Sheet1')->wherebetween('Sheet1.Arrival_DT',[$Nov22,$endNov22])->count();
-
-    $December22r= DB::table('Sheet1')->wherebetween('Sheet1.Arrival_DT',[$des22,$enddes22])->count();
-
-    $January23r= DB::table('Sheet1')->wherebetween('Sheet1.Arrival_DT',[$jan23,$endjan23])->count();
-
+    $January22r= DB::table('Sheet1')->wherebetween('Sheet1.Arrival_DT',[$jan22,$endjan22])->sum('DAYS');
+    $February22r= DB::table('Sheet1')->wherebetween('Sheet1.Arrival_DT',[$feb22,$endfeb22])->sum('DAYS');
+    $March22r= DB::table('Sheet1')->wherebetween('Sheet1.Arrival_DT',[$mar22,$endmar22])->sum('DAYS');
+    $April22r= DB::table('Sheet1')->wherebetween('Sheet1.Arrival_DT',[$apr22,$endapr22])->sum('DAYS');
+    $May22r= DB::table('Sheet1')->wherebetween('Sheet1.Arrival_DT',[$may22,$endmay22])->sum('DAYS');
+    $June22r= DB::table('Sheet1')->wherebetween('Sheet1.Arrival_DT',[$jun22,$endjun22])->sum('DAYS');
+    $July22r= DB::table('Sheet1')->wherebetween('Sheet1.Arrival_DT',[$july22,$endjuly22])->sum('DAYS');
+    $August22r= DB::table('Sheet1')->wherebetween('Sheet1.Arrival_DT',[$Aug22,$endAug22])->sum('DAYS');
+    $September22r= DB::table('Sheet1')->wherebetween('Sheet1.Arrival_DT',[$Sept22,$endSep22])->sum('DAYS');
+    $October22r= DB::table('Sheet1')->wherebetween('Sheet1.Arrival_DT',[$Oct22,$endOct22])->sum('DAYS');
+    $November22r= DB::table('Sheet1')->wherebetween('Sheet1.Arrival_DT',[$Nov22,$endNov22])->sum('DAYS');
+    $December22r= DB::table('Sheet1')->wherebetween('Sheet1.Arrival_DT',[$des22,$enddes22])->sum('DAYS');
+    $January23r= DB::table('Sheet1')->wherebetween('Sheet1.Arrival_DT',[$jan23,$endjan23])->sum('DAYS');
+    $February23r= DB::table('Sheet1')->wherebetween('Sheet1.Arrival_DT',[$feb23,$endfeb23])->sum('DAYS');
 
 
 
     return view('partials.Monthly_Bill',compact('December21','January22','February22','March22','April22','May22','June22','July22','August22','September22','October22','November22','December22','January23','December21r'
-    ,'January22r','February22r','March22r','April22r','May22r','June22r','July22r','August22r','September22r','October22r','November22r','December22r','January23r' ));
+    ,'January22r','February22r','March22r','April22r','May22r','June22r','July22r','August22r','September22r','October22r','November22r','December22r','January23r','February23r','February23' ));
 
 }
 public function Details($Customer_Id){

@@ -1,14 +1,14 @@
 @extends('layouts.internal')
 
 @section('content')
-<h1> Total Customers</h1>
+<h1 class= "text-center"> Total Customers</h1>
 {{-- Search Bar --}}
 <div>
     <div class="mx-auto pull-right">
         <div class="">
             <form action=" " method="GET" role="search">
 
-                <div class="input-group">
+                <div class="input-group ,text-center ">
                     {{-- <span class="input-group-btn mr-5 mt-1">
                         <button class="btn btn-info" type="submit" title="Search projects">
                             <span class="fas fa-search"></span>
@@ -21,7 +21,7 @@
                         </button>
                     </span>
 
-                    <a href="../Total_customer" class=" mt-1">
+                    <a href="{{ url('Total_customer') }}" class=" mt-1">
                         <span class="input-group-btn">
                             <button class="btn btn-danger" type="button" title="Refresh page">
                                 <span class="fas fa-sync-alt"></span>
@@ -34,6 +34,8 @@
         </div>
     </div>
 </div>
+
+
 
 {{-- {{$data}} --}}
 <div class="card-body">

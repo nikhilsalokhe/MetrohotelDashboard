@@ -39,9 +39,11 @@
       @endforeach
       <td></td>
       <td></td>
-      <td>Total Bill Amount={{$details->sum('Bill_amount')}}
-        <p>ARR:{{round($details->sum('Bill_amount')/$details->sum('DAYS'))}}</p></td>
-      <td> Total Days of stay:  {{$details->sum('DAYS')}}</td>
+      <td>Total Revenue Amount={{$details->sum('Bill_amount')}}
+        <p>ARR:{{round($details->sum('Bill_amount')/$details->sum('DAYS'))}}
+        <br>(Total Revenue amt/Total stay days)
+        </p></td>
+      <td> Total Stay Days:  {{$details->sum('DAYS')}}</td>
     </table>
  {{-- <td> Total Days of stay:  {{$details->sum('DAYS')}}</td>
   <td>Average Room Rent={{$details->sum('Bill_amount')/$details->sum('DAYS')}}</td> --}}

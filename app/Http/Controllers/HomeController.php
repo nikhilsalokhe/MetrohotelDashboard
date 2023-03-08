@@ -40,19 +40,22 @@ class HomeController extends Controller
 
         //This Week customer
         $today=carbon::today();
-        $startWeek = Carbon::now()->subWeek()->startOfWeek();
+        $startWeek =today()->subDays(7);
         $Weeks = DB::table('customer_info')
         ->join('Sheet1','customer_info.Customer_Id','=','Sheet1.Customer_Id')
         ->select('customer_info.*')
         ->wherebetween('Sheet1.Arrival_DT',[$startWeek,$today])->count();
 
        // This months customer
-        $lastMonth =Carbon::now()->subMonth()->format('Y-m-d');  //dd($lastMonth);
+       $lastMonth=Carbon::now()->startOfMonth();
+        // $lastMonth =Carbon::now()->subMonth()->format('Y-m-d');
+       //dd($lastMonth);
             $Months= DB::table('customer_info')
             ->join('Sheet1','customer_info.Customer_Id','=','Sheet1.Customer_Id')
             ->select('customer_info.*')
             ->wherebetween('Sheet1.Arrival_DT',[$lastMonth,$today])->count();
 
+           // dd($Months);
             //Avrage of room rate
             $rate= DB::table('Sheet1')->AVG('Bill_amount');
 
@@ -62,7 +65,7 @@ class HomeController extends Controller
             $diff=$today->diffInDays($first);
             $totaloccupancy= $diff*26;// dd($totalDays);
             $booking= DB::table('Sheet1')
-            ->wherebetween('Sheet1.Arrival_DT',[$first,$today])->count();
+            ->wherebetween('Sheet1.Arrival_DT',[$first,$today])->sum('DAYS');
             $percent=($booking/$totaloccupancy)*100;
            //dd($percent);
         //    $avgbooking = $booking/26;// dd($booking);
@@ -76,23 +79,22 @@ class HomeController extends Controller
 
 
             // pie chart
-            $city=DB::select(DB::raw("select count(*) as total_city ,CITY from customer_info group by CITY"));
+            $city=DB::select(DB::raw("select count(*) as total_city ,CITY from customer_info group by CITY ORDER BY count(*) DESC limit 10 "));
 //dd($city);
             $chartdata="";
-
-            foreach($city as $list)
+             foreach($city as $list)
             {
-                // $chartdata= $list->CITY ;
-                $chartdata.="['".$list->CITY."',   ".$list->total_city."],";
+                //$chartdata= $list->CITY ;
+               $chartdata.="['".$list->CITY."',   ".$list->total_city."],";
             }
-            //dd($chartdata);
+           // dd($chartdata);
             $arr['chartdata']=rtrim($chartdata,",");
 
-
+        //     $ci=DB::select(DB::raw("select count(*) as total_city ,CITY from customer_info group by CITY ORDER BY count(*) DESC"));
+        //    // dd($ci);
 
         return view('home',compact('todays','data','Weeks','Months','rate','booking','mostVistited','totaloccupancy','percent','chartdata'));
 
     }
-
 
 }

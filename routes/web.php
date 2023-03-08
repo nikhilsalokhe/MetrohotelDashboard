@@ -28,5 +28,7 @@ Route::get('/MostVistited', 'Customer_info@MostVistited');
 Route::get('/Checkin_3_hr', 'Customer_info@Checkin_3_hr');
 Route::get('/Monthly_Bill', 'Customer_info@Monthly_Bill');
 Route::get('/details/{Customer_Id}', 'Customer_info@Details');
+Route::get('/one_day_details', 'Customer_info@Weeks_customer');
+Route::get('/findCustomer', 'Customer_info@Months_customer');
 //Route::get('/chart','Customer_info@chart');
 // change
