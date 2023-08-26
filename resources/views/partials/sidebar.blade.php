@@ -1,22 +1,22 @@
 <!-- Main Sidebar Container -->
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
-    <a href="index3.html" class="brand-link">
-      <img src= "{{ asset('dist/img/AdminLTELogo.png')}}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+    <a href="{{url('/home')}}" class="brand-link">
+      <img src= "{{ asset('dist/img/metro.png')}}" alt="Logo" class="brand-image img-circle elevation-3" style="opacity: .8;">
       <span class="brand-text font-weight-light"> HOTEL METRO</span>
     </a>
 
     <!-- Sidebar -->
     <div class="sidebar">
       <!-- Sidebar user panel (optional) -->
-      <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+      {{-- <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="image">
-          <img src="{{asset('dist/img/user2-160x160.jpg')}}" class="img-circle elevation-2" alt="User Image">
+          <img src="{{asset('dist/img/metro.png')}}" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
           <a href="#" class="d-block"> {{ Auth::user()->name }}</a>
         </div>
-      </div>
+      </div> --}}
 
       <!-- SidebarSearch Form -->
       <div class="form-inline">
@@ -103,6 +103,37 @@
               </p>
             </a>
           </li>
+          <li  i class="nav-item menu-open">
+            <a href="{{url('managecoupon')}}" class="nav-link ">
+              <i class="nav-icon fas fa-gift"></i>
+              <p>
+                  Manage Coupon
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="{{ url('voucher-lists') }}" class="nav-link ">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Voucher</p>
+                </a>
+              </li>
+              
+              <li class="nav-item">
+                <a href="{{ url('customers') }}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Customer </p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{ url('vouchernames') }}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Master Voucher </p>
+                </a>
+              </li>
+            </ul>
+          </li>
+          
 
           {{-- <li class="nav-item menu-open">
             <a href="#" class="nav-link ">

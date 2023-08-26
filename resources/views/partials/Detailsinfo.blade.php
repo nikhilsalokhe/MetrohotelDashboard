@@ -7,48 +7,92 @@
 {{$details->sum('DAYS')}} --}}
 
 
-@extends('layouts.internal')
+{{-- @extends('layouts.internal') --}}
+@extends('voucher.layouts.app')
+
 
 @section('content')
-<h1>Guest History</h1>
-{{-- Search Bar --}}
-{{-- {{$data}} --}}
-<div class="card-body">
-    <table id="example2" class="table table-bordered table-hover">
-    <thead>
-        customer Name :{{$details1->Guest_name}}
-      <tr>
+    <div class="container">
+        <div class="card m-2 border">
+            <div class="card-header " style="background-color: rgb(215, 221, 228)">
+            @include('backbutton')
+                <h1>Guest History</h1>
+                <h4>Customer Name : {{ $details1->customer_name }}</h4>
+            </div>
 
+            {{-- Search Bar --}}
+            {{-- {{$data}} --}}
+            <div class="card-body">
+                <div class="table-responsive  px-1">
+                    <table id="data-table" class="table table-bordered table-hover">
+                        <thead>
+                            <tr>
+            					<th>Sr. No.</th>
+                                <th data-order="desc">Arrival Date</th>
+                                <th>Arrival Time</th>
+                                <th>Departure Date</th>
+                                <th>Departure Time</th>
+                                <th>Room No.</th>
+                                <th>PAX</th>
+                                <th>Days of stay</th>
+                                <th>Bill Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($details as $item)
+                                {{-- {{dd($item)}} --}}
+                                <tr>
+                                	<td>{{ $item->serial_no }}</td>
+                                    <td data-sort="{{ \Carbon\Carbon::parse($item->ARRIVAL)->format('Y-m-d H:i') }}">
+                                        {{ \Carbon\Carbon::parse($item->ARRIVAL)->format('d-m-Y') }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($item->ARRIVAL)->format('h:i A') }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($item->DEPART)->format('d-m-Y') }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($item->DEPART)->format('h:i A') }}</td>
+                                    <td>{{ $item->ROOM }}</td>
+                                    <td>{{ $item->PAX }}</td>
+                                    <td>{{ $item->DAYS }}</td>
+                                    <td>{{ $item->{'BILL AMOUNT'} }}</td>
+                                </tr>
+                            @endforeach
+                        </tbody>
 
-        <th>Arrival Date and Time</th>
-        <th>Departure Date And Time</th>
-        <th>Bill Amount</th>
-        <th>Days of stay</th>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td> Total Stay Days: {{ $details->sum('DAYS') }}</td>
+                        <td>
+                            Total Revenue Amount: {{ $revenue_amount }}
+                            <p>
+                                Average Room Rate: {{ $arr }}
+                                <br>(Total Revenue amt/Total stay days)
+                            </p>
+                        </td>
 
-      </tr>
-      @foreach ($details as $item)
-    </thead>
-    <tbody>
-      <tr>
-        <td>{{$item->Arrival_DT}}</td>
-        <td>{{$item->DEPART}}</td>
-        <td>{{$item->Bill_amount}}</td>
-        <td>{{$item->DAYS}}</td>
-      </tr>
-    </tbody>
-      @endforeach
-      <td></td>
-      <td></td>
-      <td>Total Revenue Amount={{$details->sum('Bill_amount')}}
-        <p>ARR:{{round($details->sum('Bill_amount')/$details->sum('DAYS'))}}
-        <br>(Total Revenue amt/Total stay days)
-        </p></td>
-      <td> Total Stay Days:  {{$details->sum('DAYS')}}</td>
-    </table>
- {{-- <td> Total Days of stay:  {{$details->sum('DAYS')}}</td>
-  <td>Average Room Rent={{$details->sum('Bill_amount')/$details->sum('DAYS')}}</td> --}}
-  {{-- Average Room Rent :  {{$a}} --}}
-  </div>
-<!-- /.card -->
+                    </table>
+                    <!-- Includeed necessary JavaScript file -->
+                    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                    <script>
+                        $(document).ready(function() {
+                            $('#data-table').DataTable({
+                                "order": [
+                                    [0, "desc"]
+                                ],
+                            	"iDisplayLength": 25,// Set the default number of records to display
+                                "columnDefs": [{
+                                        "targets": 0,
+                                        "type": "date"
+                                    } // Set the first column to use date sorting
+                                ]
+                            });
+                        });
+                    </script>
+                </div>
+            </div>
+        </div>
+        <!-- /.card -->
+    </div>
 @endsection
-

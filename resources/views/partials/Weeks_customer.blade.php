@@ -1,18 +1,23 @@
-@extends('layouts.internal')
+{{-- @extends('layouts.internal') --}}
+@extends('voucher.layouts.app')
 
 @section('content')
 
-<head>
-    <link href="http://code.jquery.com/ui/1.9.2/themes/smoothness/jquery-ui.css" rel="stylesheet" />
-    <script src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
-    <script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
-</head>
-<h1 class= "text-center"> Total this Week's Customers</h1>
+    <head>
+        <link href="http://code.jquery.com/ui/1.9.2/themes/smoothness/jquery-ui.css" rel="stylesheet" />
+        <script src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
+        <script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
+    </head>
+    <div class="card m-2 border">
+        <div class="card-header" style="background-color: rgb(215, 221, 228)">
+            @include('backbutton')
+            <h1 class="text-center mb-2"> Total This Week's Customers</h1>
+            <h3 class="text-center mb-3">{{ $weekscount }}</h3>
+        </div>
+            {{-- Custom Date --}}
 
-    {{-- Custom Date --}}
 
-
-    <div class="float-right">
+            {{-- <div class="float-right">
         <div class="">
 
             <form action="{{ url('one_day_details') }}" method="GET" role="search">
@@ -33,52 +38,61 @@
             </form>
 
         </div>
-    </div>
+    </div> --}}
 
-    {{-- end custom date --}}
+            {{-- end custom date --}}
 
 
 
-{{-- {{$data}} --}}
-<div class="card-body">
-    <table id="example2" class="table table-bordered table-hover">
-    <thead>
-      <tr>
-        <th>Customer ID</th>
-        <th>customer Name</th>
-        <th>Arrival date time</th>
-        <th>Departre date time</th>
-        <th>Address</th>
-        <th>Phone No.</th>
-      </tr>
-      @foreach ($data as $key )
-    </thead>
-    <tbody>
-      <tr>
-        <td>{{$key->Customer_Id}}</td>
-        <td>{{$key->Guest_name}}</td>
-        <td>{{$key->Arrival_DT}}</td>
-        <td>{{$key->DEPART}}</td>
-        <td> {{$key->Address}}</td>
-        <td>{{$key->Phone_no}}</td>
-      </tr>
-    </tbody>
-      @endforeach
-    </table>
-  </div>
-  <!-- /.card-body -->
-</div>
-<script type="text/javascript">
-    // $(function() {
-    //     $("#datepicker").datepicker({
-    //         maxDate: new Date()
-    //     });
+            {{-- {{$data}} --}}
+            <div class="card-body">
+                <table id="data-table-basic" class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th>Customer ID</th>
+                            <th>customer Name</th>
+                            <th>Arrival date time</th>
+                            <th>Departre date time</th>
+                            <th>Room No</th>
+                            <th>Address</th>
+                            <th>Phone No.</th>
+                        </tr>
 
-    // });
-    $( '#datepicker' ).datepicker({
-    minDate: '-7d',
-    maxDate: new Date()
-});
-</script>
-<!-- /.card -->
-@endsection
+                    </thead>
+                    <tbody>
+                        @foreach ($data as $key)
+                            <tr>
+                                <td>{{ $key->customer_id }}</td>
+                                <td>{{ $key->customer_name }}</td>
+                                <td>{{ \Carbon\Carbon::parse($key->ARRIVAL)->format('d-m-Y h:i A') }}</td>
+                                <td>{{ \Carbon\Carbon::parse($key->DEPART)->format('d-m-Y h:i A') }}</td>
+                                <td>{{ $key->ROOM }}</td>
+                                <td> {{ $key->address }}</td>
+                                <td>{{ $key->phone_no }}</td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+
+                </table>
+            </div>
+            <!-- /.card-body -->
+        </div>
+        {{-- Card End --}}
+        <script>
+            $('#datepicker').datepicker({
+                minDate: '-7d',
+                maxDate: new Date()
+            });
+        </script>
+        <!-- /.card -->
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script>
+            $(document).ready(function() {
+                $('#data-table').DataTable({
+                    "iDisplayLength": 25 // Set the default number of records to display
+    
+                });
+            });
+        </script>
+        <!-- /.card -->
+    @endsection
